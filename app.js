@@ -43,7 +43,7 @@ app.get("/api/users/:id", (req, res) => {
     console.log(user)
 
     if (!user) {
-        res.send("USUARIO NO ENCONTRADO")
+        res.json({ error: true, message: "USUARIO NO ENCONTRADO" })
     }
     res.json(user)
 
@@ -61,7 +61,11 @@ app.put("/api/users", (req, res) => {
 
 app.delete("/api/users", (req, res) => res.send("ENDPOINT DELETE USER"))
 
-const port = process.env.PORT;
+console.log(process.env.PORT)
+
+console.log(process.env.TOPSECRET)
+
+const port = process.env.PORT
 
 app.listen(port, () => {
     console.log(`server (backend) running on port: ${port}`)
