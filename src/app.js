@@ -4,6 +4,7 @@ import dotenv from "dotenv";
 import router from "./routes/index.js";
 import { connectDB } from "./config/db.js";
 import userRouter from "./routes/userRouter.js";
+import productRouter from "./routes/productRouter.js";
 
 dotenv.config();
 
@@ -25,7 +26,9 @@ app.use((req, res, next) => {
     next()
 
 })
-app.use("/api/users", userRouter)
+
+app.use("/api/users", userRouter);
+app.use("/api/products", productRouter);
 
 
 const port = process.env.PORT
