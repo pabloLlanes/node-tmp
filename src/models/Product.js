@@ -5,6 +5,7 @@ const productSchema = new mongoose.Schema(
         name: {
             type: String,
             trim: true,
+            required: [true, 'El nombre del producto es obligatorio']
         },
 
         description: {
@@ -20,6 +21,27 @@ const productSchema = new mongoose.Schema(
         isAvailable: {
             type: Boolean,
             default: true
+        },
+        
+        creator: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'User',
+            // No es obligatorio para permitir productos sin creador asignado
+        },
+        
+        price: {
+            type: Number,
+            default: 0
+        },
+        
+        image: {
+            type: String,
+            default: '/uploads/products/default.jpg'
+        },
+        
+        category: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'Category'
         }
     },
     {
