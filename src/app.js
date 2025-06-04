@@ -27,7 +27,8 @@ import userRouter from "./routes/userRouter.js";
 import productRouter from "./routes/productRouter.js";
 import categoryRouter from "./routes/categoryRouter.js";
 import orderRouter from "./routes/orderRouter.js";
-import relationRouter from "./routes/relationRouter.js"; // Nuevo router para gestionar relaciones
+import relationRouter from "./routes/relationRouter.js"; // Router para gestionar relaciones
+import authRouter from "./routes/authRouter.js"; // Nuevo router para gestionar autenticación
 
 /**
  * Configuración de __dirname en ES modules
@@ -110,6 +111,7 @@ app.use((req, res, next) => {
  * Cada recurso tiene su propio router que maneja endpoints específicos
  * La URL base de cada recurso se define aquí y el router maneja las subrutas
  */
+app.use("/api/auth", authRouter);        // Maneja rutas como /api/auth/login, /api/auth/register, etc.
 app.use("/api/users", userRouter);       // Maneja rutas como /api/users, /api/users/:id, etc.
 app.use("/api/products", productRouter);   // Maneja rutas como /api/products, /api/products/:id, etc.
 app.use("/api/categories", categoryRouter); // Maneja rutas como /api/categories, /api/categories/:id, etc.

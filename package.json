@@ -4,7 +4,11 @@
   "main": "app.js",
   "scripts": {
     "start": "node src/app.js",
-    "dev": "node --watch src/app.js"
+    "dev": "node --watch src/app.js",
+    "start:no-comments": "node src-without-comments/app.js",
+    "dev:no-comments": "node --watch src-without-comments/app.js",
+    "start:class": "node src-class/app.js",
+    "dev:class": "node --watch src-class/app.js"
   },
   "keywords": [],
   "author": "",

@@ -3,8 +3,8 @@
  * RUTAS DE USUARIOS (userRouter.js)
  * ==========================================
  * Este archivo define todas las rutas relacionadas con los usuarios.
- * Implementa los endpoints necesarios para la autenticación y gestión de usuarios,
- * incluyendo login, registro, consulta, actualización y eliminación.
+ * Implementa los endpoints necesarios para la gestión de usuarios,
+ * incluyendo consulta, actualización y eliminación.
  * 
  * Incorpora validaciones de datos de entrada y middlewares de seguridad
  * para proteger las rutas sensibles.
@@ -22,12 +22,10 @@ import { Router } from "express";
  * Funciones que manejan la lógica de negocio para cada operación
  */
 import {
-    createUser,   // Registrar un nuevo usuario
     getUsers,     // Listar todos los usuarios
     getUser,      // Obtener un usuario específico por ID
     deleteUser,   // Eliminar un usuario
-    updateUser,   // Actualizar datos de usuario
-    login         // Autenticar un usuario y generar token
+    updateUser    // Actualizar datos de usuario
 } from "../controllers/userController.js";
 
 /**
@@ -55,34 +53,7 @@ import { verifyAdminRole } from "../middlewares/verifyAdminRole.js";
  */
 const userRouter = Router();
 
-/**
- * Ruta: POST /api/users/login
- * Descripción: Autentica un usuario y genera un token JWT
- * Body: {
- *   email: String (obligatorio, debe ser un email válido),
- *   password: String (obligatorio)
- * }
- * Validaciones:
- *   - email debe ser un correo electrónico válido
- *   - password no puede estar vacío
- * Middlewares:
- *   - express-validator para validar los campos de entrada
- *   - handleValidationErrors para gestionar errores de validación
- * Respuesta exitosa: { token, user }
- * Respuesta error: { success: false, message }
- */
-userRouter.post("/login",
-    [
-        // Validar que el email sea válido y normalizarlo (convertir a minúsculas, etc.)
-        check('email', 'El email es obligatorio | EV').isEmail().normalizeEmail(),
-        // Validar que el password esté presente
-        check('password', 'El password es obligatorio | EV').not().isEmpty()
-    ],
-    // Middleware para manejar errores de validación
-    handleValidationErrors,
-    // Controlador que maneja la lógica de autenticación
-    login
-)
+
 
 /**
  * Ruta: GET /api/users
@@ -120,36 +91,22 @@ userRouter.get("/:id",
 
 /**
  * Ruta: POST /api/users
- * Descripción: Crea un nuevo usuario en el sistema
+ * Descripción: Crea un nuevo usuario en el sistema (exclusivo para administradores)
  * Body: {
  *   name: String (obligatorio),
  *   email: String (obligatorio, debe ser un email válido),
  *   password: String (obligatorio),
  *   role: String (opcional)
  * }
- * Validaciones:
- *   - name no puede estar vacío
- *   - email debe ser un correo electrónico válido
- *   - password no puede estar vacío
+ * Nota: Para el registro normal de usuarios, use /api/auth/register
  * Middlewares:
- *   - handleValidationErrors: Maneja errores de validación
  *   - verifyToken: Verifica que el usuario esté autenticado
  *   - verifyAdminRole: Verifica que el usuario tenga rol de administrador
- * Seguridad: Solo los administradores pueden crear usuarios
+ * Seguridad: Solo los administradores pueden crear usuarios por esta ruta
  * Respuesta exitosa: { success: true, user }
  * Respuesta error: { success: false, message }
  */
 userRouter.post("/",
-    [
-        // Validar que el nombre esté presente y eliminar espacios en blanco
-        check('name', 'El nombre es obligatorio | EV').not().isEmpty().trim(),
-        // Validar que el email sea válido y normalizarlo
-        check('email', 'El email es obligatorio | EV').isEmail().normalizeEmail(),
-        // Validar que el password esté presente
-        check('password', 'El password es obligatorio | EV').not().isEmpty()
-    ],
-    // Middleware para manejar errores de validación
-    handleValidationErrors,
     // Middleware para verificar autenticación mediante token JWT
     verifyToken,
     // Middleware para verificar que el usuario tiene rol de administrador
