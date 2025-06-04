@@ -21,7 +21,7 @@ import { Router } from "express";
  * Controladores de usuarios
  * Funciones que manejan la lógica de negocio para cada operación
  */
-import { 
+import {
     createUser,   // Registrar un nuevo usuario
     getUsers,     // Listar todos los usuarios
     getUser,      // Obtener un usuario específico por ID
@@ -214,6 +214,8 @@ userRouter.put("/:id", [
 ],
     // Middleware para manejar errores de validación
     handleValidationErrors,
+    // Middleware para verificar autenticación mediante token JWT
+    verifyToken,
     // Controlador que actualiza el usuario
     updateUser
 )

@@ -89,26 +89,22 @@ export const createUser = async (req, res) => {
 
 export const getUser = async (req, res) => {
     try {
-
         const userId = req.params.id;
-
-        console.log(userId)
-
         const user = await User.findById(userId);
 
         if (!user) {
-            res.json({ message: "CHE USUARIO NO ENCONTRADO, pasame un id valido" })
+            return res.status(404).json({ message: "CHE USUARIO NO ENCONTRADO, pasame un id valido" });
         }
 
-        console.log(user)
+        // Obtener todos los productos creados por este usuario y poblar el campo creator
+        const products = await Product.find({ creator: userId }).populate('creator');
 
-        //respuesta
         res.json({
             statusOK: true,
             message: "user encountered!!",
-            user: user
-        })
-
+            user: user,
+            productsCreated: products // Lista de productos con info completa del creator
+        });
     } catch (error) {
         console.log(error)
         res.status(500).json({

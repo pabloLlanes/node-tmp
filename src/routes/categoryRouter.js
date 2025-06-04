@@ -34,6 +34,12 @@ import { check, param } from 'express-validator';
 import { handleValidationErrors } from "../middlewares/validationMiddleware.js";
 
 /**
+ * Middleware de autenticación
+ * Verifica si el usuario está autenticado mediante token JWT
+ */
+import { verifyToken } from "../middlewares/verifyToken.js";
+
+/**
  * Controladores de categorías
  * Estos controladores contienen la lógica de negocio para cada operación
  */
@@ -115,7 +121,9 @@ categoryRouter.post("/", [
     // Validar que el nombre de la categoría esté presente y no vacío
     check('name').notEmpty().withMessage('El nombre de la categoría es obligatorio'),
     // Middleware para manejar errores de validación
-    handleValidationErrors
+    handleValidationErrors,
+    // Middleware de autenticación - verifica que el usuario esté autenticado
+    verifyToken
 ], createCategory);
 
 /**
@@ -139,7 +147,9 @@ categoryRouter.put("/:id", [
     // Validar que el nombre de la categoría esté presente y no vacío
     check('name').notEmpty().withMessage('El nombre de la categoría es obligatorio'),
     // Middleware para manejar errores de validación
-    handleValidationErrors
+    handleValidationErrors,
+    // Middleware de autenticación - verifica que el usuario esté autenticado
+    verifyToken
 ], updateCategory);
 
 /**
@@ -159,7 +169,9 @@ categoryRouter.patch("/:id", [
     // Validar que el ID sea un MongoDB ObjectId válido
     param('id').isMongoId().withMessage('ID de categoría no válido'),
     // Middleware para manejar errores de validación
-    handleValidationErrors
+    handleValidationErrors,
+    // Middleware de autenticación - verifica que el usuario esté autenticado
+    verifyToken
 ], patchCategory);
 
 /**
@@ -178,7 +190,9 @@ categoryRouter.delete("/:id", [
     // Validar que el ID sea un MongoDB ObjectId válido
     param('id').isMongoId().withMessage('ID de categoría no válido'),
     // Middleware para manejar errores de validación
-    handleValidationErrors
+    handleValidationErrors,
+    // Middleware de autenticación - verifica que el usuario esté autenticado
+    verifyToken
 ], deleteCategory);
 
 /**

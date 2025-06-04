@@ -16,6 +16,8 @@ import path from "path";
 import { fileURLToPath } from "url";
 // Fs: Sistema de archivos para crear directorios y verificar si existen
 import fs from "fs";
+// CORS: Middleware para habilitar solicitudes desde dominios cruzados
+import cors from "cors";
 // Importación de rutas principales desde index.js
 import router from "./routes/index.js";
 // Conexión a la base de datos MongoDB
@@ -25,6 +27,7 @@ import userRouter from "./routes/userRouter.js";
 import productRouter from "./routes/productRouter.js";
 import categoryRouter from "./routes/categoryRouter.js";
 import orderRouter from "./routes/orderRouter.js";
+import relationRouter from "./routes/relationRouter.js"; // Nuevo router para gestionar relaciones
 
 /**
  * Configuración de __dirname en ES modules
@@ -58,6 +61,20 @@ const app = express();
 
 // Middleware para analizar cuerpos de solicitud JSON (req.body)
 app.use(express.json());
+
+/**
+ * Configuración de CORS (Cross-Origin Resource Sharing)
+ * Permite que el frontend en http://localhost:5174 pueda realizar solicitudes a esta API
+ * Esto es esencial para aplicaciones que tienen el frontend y backend en dominios diferentes
+ */
+app.use(cors());
+
+// Configuración CORS para producción
+/* app.use(cors({
+    origin: ['https://tudominio.com', 'https://app.tudominio.com'],
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH'],
+    credentials: true
+  })); */
 
 /**
  * Configuración para servir archivos estáticos
@@ -97,6 +114,7 @@ app.use("/api/users", userRouter);       // Maneja rutas como /api/users, /api/u
 app.use("/api/products", productRouter);   // Maneja rutas como /api/products, /api/products/:id, etc.
 app.use("/api/categories", categoryRouter); // Maneja rutas como /api/categories, /api/categories/:id, etc.
 app.use("/api/orders", orderRouter);     // Maneja rutas como /api/orders, /api/orders/:id, etc.
+app.use("/api/relations", relationRouter); // Maneja rutas para gestionar relaciones entre entidades
 
 
 /**

@@ -223,15 +223,17 @@ export const getProductById = async (req, res) => {
         // Extraer el ID del producto de los parámetros de la URL
         const productId = req.params.id;
 
-        // Buscar el producto por ID y poblar la información de su categoría
-        const product = await Product.findById(productId).populate('category');
+        // Buscar el producto por ID y poblar la información de su categoría y creador
+        const product = await Product.findById(productId)
+            .populate('category')
+            .populate('creator');
 
         // Verificar si el producto existe
         if (!product) {
             return res.status(404).json({ success: false, message: 'Producto no encontrado' });
         }
 
-        // Devolver el producto encontrado
+        // Devolver el producto encontrado (con relaciones)
         res.json({ success: true, product });
 
     } catch (error) {

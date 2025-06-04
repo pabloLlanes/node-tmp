@@ -34,6 +34,13 @@ import { check, param } from 'express-validator';
 import { handleValidationErrors } from "../middlewares/validationMiddleware.js";
 
 /**
+ * Middleware de autenticación
+ * Verifica si el usuario está autenticado mediante token JWT antes de permitir
+ * operaciones que modifiquen recursos
+ */
+import { verifyToken } from "../middlewares/verifyToken.js";
+
+/**
  * Controladores de productos
  * Estos controladores contienen la lógica de negocio para cada operación
  */
@@ -132,7 +139,9 @@ productRouter.post("/", [
     // Validar que el nombre del producto esté presente y no vacío
     check('name').notEmpty().withMessage('El nombre del producto es obligatorio'),
     // Manejo de errores de validación
-    handleValidationErrors
+    handleValidationErrors,
+    // Middleware de autenticación - verifica que el usuario esté autenticado
+    verifyToken
 ], createProduct);
 
 /**
@@ -160,7 +169,9 @@ productRouter.put("/:id", [
     // Si se proporciona un nombre, verificar que no esté vacío
     check('name').optional().notEmpty().withMessage('El nombre no puede estar vacío'),
     // Manejo de errores de validación
-    handleValidationErrors
+    handleValidationErrors,
+    // Middleware de autenticación - verifica que el usuario esté autenticado
+    verifyToken
 ], updateProduct);
 
 /**
@@ -180,7 +191,9 @@ productRouter.patch("/:id", [
     // Validar que el ID sea un MongoDB ObjectId válido
     param('id').isMongoId().withMessage('ID de producto no válido'),
     // Manejo de errores de validación
-    handleValidationErrors
+    handleValidationErrors,
+    // Middleware de autenticación - verifica que el usuario esté autenticado
+    verifyToken
 ], patchProduct);
 
 /**
@@ -196,7 +209,9 @@ productRouter.delete("/:id", [
     // Validar que el ID sea un MongoDB ObjectId válido
     param('id').isMongoId().withMessage('ID de producto no válido'),
     // Manejo de errores de validación
-    handleValidationErrors
+    handleValidationErrors,
+    // Middleware de autenticación - verifica que el usuario esté autenticado
+    verifyToken
 ], deleteProduct);
 
 /**
@@ -214,7 +229,9 @@ productRouter.post("/:id/upload-image", [
     // Validar que el ID sea un MongoDB ObjectId válido
     param('id').isMongoId().withMessage('ID de producto no válido'),
     // Manejo de errores de validación
-    handleValidationErrors
+    handleValidationErrors,
+    // Middleware de autenticación - verifica que el usuario esté autenticado
+    verifyToken
 ], 
     // Middleware de Multer que procesa un único archivo con el nombre de campo 'image'
     upload.single('image'), 
