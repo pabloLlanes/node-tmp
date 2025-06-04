@@ -1,4 +1,4 @@
-# Guu00eda de Controladores (Controllers)
+# Guía de Controladores (Controllers)
 
 ## ¿Qué son los Controladores?
 
@@ -54,40 +54,40 @@ Nuestra API implementa los siguientes controladores:
 Maneja todas las operaciones relacionadas con los usuarios:
 
 - Registro de usuarios
-- Inicio de sesiu00f3n y autenticaciu00f3n
-- Obtenciu00f3n de perfiles de usuario
-- Actualizaciu00f3n de datos de usuario
-- Eliminaciu00f3n de cuentas
+- Inicio de sesión y autenticación
+- Obtención de perfiles de usuario
+- Actualización de datos de usuario
+- Eliminación de cuentas
 
 ### 2. Controlador de Productos (`productController.js`)
 
-Gestiona el catu00e1logo de productos:
+Gestiona el catálogo de productos:
 
-- Listado de productos (con paginaciu00f3n)
-- Bu00fasqueda y filtrado de productos
-- Creaciu00f3n de nuevos productos
-- Actualizaciu00f3n de productos existentes
-- Eliminaciu00f3n de productos
-- Subida de imu00e1genes de productos
+- Listado de productos (con paginación)
+- Búsqueda y filtrado de productos
+- Creación de nuevos productos
+- Actualización de productos existentes
+- Eliminación de productos
+- Subida de imágenes de productos
 
-### 3. Controlador de Categoru00edas (`categoryController.js`)
+### 3. Controlador de Categorías (`categoryController.js`)
 
-Administra las categoru00edas de productos:
+Administra las categorías de productos:
 
-- Listado de categoru00edas
-- Creaciu00f3n de nuevas categoru00edas
-- Actualizaciu00f3n de categoru00edas
-- Eliminaciu00f3n de categoru00edas
-- Obtenciu00f3n de productos por categoru00eda
+- Listado de categorías
+- Creación de nuevas categorías
+- Actualización de categorías
+- Eliminación de categorías
+- Obtención de productos por categoría
 
-### 4. Controlador de u00d3rdenes (`orderController.js`)
+### 4. Controlador de Órdenes (`orderController.js`)
 
-Maneja el proceso de compra y las u00f3rdenes:
+Maneja el proceso de compra y las órdenes:
 
-- Creaciu00f3n de nuevas u00f3rdenes
-- Listado de u00f3rdenes de un usuario
-- Actualizaciu00f3n del estado de las u00f3rdenes
-- Cancelaciu00f3n de u00f3rdenes
+- Creación de nuevas órdenes
+- Listado de órdenes de un usuario
+- Actualización del estado de las órdenes
+- Cancelación de órdenes
 
 ## Patrones Comunes en los Controladores
 
@@ -97,9 +97,9 @@ Todos nuestros controladores utilizan bloques try/catch para capturar excepcione
 
 ```javascript
 try {
-  // Lu00f3gica del controlador
+  // Lógica del controlador
 } catch (error) {
-  console.log(error); // Registrar el error para depuraciu00f3n
+  console.log(error); // Registrar el error para depuración
   res.status(500).json({
     success: false,
     message: 'Mensaje descriptivo del error',
@@ -108,12 +108,12 @@ try {
 }
 ```
 
-### 2. Validaciu00f3n de Datos
+### 2. Validación de Datos
 
-La validaciu00f3n principal se realiza en las rutas con express-validator, pero los controladores tambiu00e9n realizan validaciones especu00edficas del dominio:
+La validaciu00f3n principal se realiza en las rutas con express-validator, pero los controladores también realizan validaciones específicas del dominio:
 
 ```javascript
-// Validaciu00f3n de existencia
+// Validación de existencia
 const item = await Model.findById(id);
 if (!item) {
   return res.status(404).json({
@@ -122,26 +122,26 @@ if (!item) {
   });
 }
 
-// Validaciu00f3n de permisos
+// Validación de permisos
 if (item.creator.toString() !== req.user._id.toString()) {
   return res.status(403).json({
     success: false,
-    message: 'No tiene permisos para esta operaciu00f3n',
+    message: 'No tiene permisos para esta operación',
   });
 }
 ```
 
-### 3. Paginaciu00f3n
+### 3. Paginación
 
-Para endpoints que devuelven mu00faltiples resultados, implementamos paginaciu00f3n consistente:
+Para endpoints que devuelven múltiples resultados, implementamos paginación consistente:
 
 ```javascript
-// Extraer paru00e1metros de paginaciu00f3n
+// Extraer parámetros de paginación
 const page = parseInt(req.query.page) || 1;
 const limit = parseInt(req.query.limit) || 10;
 const skip = (page - 1) * limit;
 
-// Consulta con paginaciu00f3n
+// Consulta con paginación
 const items = await Model.find()
   .skip(skip)
   .limit(limit)
@@ -150,7 +150,7 @@ const items = await Model.find()
 // Total para cu00e1lculo de pu00e1ginas
 const total = await Model.countDocuments();
 
-// Metadatos de paginaciu00f3n en la respuesta
+// Metadatos de paginación en la respuesta
 res.json({
   success: true,
   count: items.length,
@@ -163,13 +163,13 @@ res.json({
 
 ### 4. Formato de Respuestas
 
-Todas las respuestas siguen un formato estu00e1ndar para consistencia:
+Todas las respuestas siguen un formato estándar para consistencia:
 
 ```javascript
 // Respuesta exitosa
 res.status(200).json({
   success: true,
-  message: 'Operaciu00f3n completada con u00e9xito',
+  message: 'Operación completada con éxito',
   data: result, // Puede ser un objeto o array
 });
 
@@ -183,7 +183,7 @@ res.status(errorCode).json({
 
 ## Ejemplos Detallados
 
-### Ejemplo 1: Creaciu00f3n de un Producto
+### Ejemplo 1: Creación de un Producto
 
 ```javascript
 export const createProduct = async (req, res) => {
@@ -192,13 +192,13 @@ export const createProduct = async (req, res) => {
     const { name, price, description, category, available, stock, image } =
       req.body;
 
-    // 2. Validar categoru00eda si se proporciona
+    // 2. Validar categoría si se proporciona
     if (category) {
       const categoryExists = await Category.findById(category);
       if (!categoryExists) {
         return res.status(400).json({
           success: false,
-          message: 'La categoru00eda especificada no existe',
+          message: 'La categoría especificada no existe',
         });
       }
     }
@@ -231,43 +231,43 @@ export const createProduct = async (req, res) => {
 };
 ```
 
-### Ejemplo 2: Bu00fasqueda de Productos
+### Ejemplo 2: Búsqueda de Productos
 
 ```javascript
 export const searchProducts = async (req, res) => {
   try {
-    // 1. Paru00e1metros de paginaciu00f3n
+    // 1. Paru00e1metros de paginación
     const page = parseInt(req.query.page) || 1;
     const limit = parseInt(req.query.limit) || 10;
     const skip = (page - 1) * limit;
 
-    // 2. Obtener tu00e9rmino de bu00fasqueda
+    // 2. Obtener término de búsqueda
     const searchQuery = req.query.search || '';
 
-    // 3. Validar que se proporcionu00f3 un tu00e9rmino
+    // 3. Validar que se proporcionó un término
     if (!searchQuery) {
       return res.status(400).json({
         success: false,
-        message: 'Por favor proporcione un tu00e9rmino de bu00fasqueda',
+        message: 'Por favor proporcione un término de búsqueda',
       });
     }
 
-    // 4. Construir consulta de bu00fasqueda (insensible a mayu00fasculas/minu00fasculas)
+    // 4. Construir consulta de búsqueda (insensible a mayúsculas/minúsculas)
     const searchRegex = new RegExp(searchQuery, 'i');
     const query = {
       $or: [{ name: searchRegex }, { description: searchRegex }],
     };
 
-    // 5. Ejecutar consulta con paginaciu00f3n
+    // 5. Ejecutar consulta con paginación
     const products = await Product.find(query)
       .skip(skip)
       .limit(limit)
       .sort({ createdAt: -1 });
 
-    // 6. Contar total de resultados para paginaciu00f3n
+    // 6. Contar total de resultados para paginación
     const total = await Product.countDocuments(query);
 
-    // 7. Respuesta con metadatos de paginaciu00f3n
+    // 7. Respuesta con metadatos de paginación
     res.json({
       success: true,
       count: products.length,
@@ -280,29 +280,29 @@ export const searchProducts = async (req, res) => {
     console.log(error);
     res.status(500).json({
       success: false,
-      message: 'Error en la bu00fasqueda de productos',
+      message: 'Error en la búsqueda de productos',
       error: error.message,
     });
   }
 };
 ```
 
-## Mejores Pru00e1cticas Implementadas
+## Mejores Prácticas Implementadas
 
-1. **Separaciu00f3n de responsabilidades**: Cada controlador se encarga de una entidad especu00edfica
+1. **Separación de responsabilidades**: Cada controlador se encarga de una entidad específica
 
 2. **Consistencia**: Estructura similar en todos los controladores para facilitar el mantenimiento
 
-3. **Manejo de errores robusto**: Try/catch en todas las funciones asu00edncronas
+3. **Manejo de errores robusto**: Try/catch en todas las funciones asíncronas
 
-4. **Validaciu00f3n exhaustiva**: Comprobaciones tanto a nivel de ruta como dentro del controlador
+4. **Validación exhaustiva**: Comprobaciones tanto a nivel de ruta como dentro del controlador
 
-5. **Comentarios descriptivos**: Documentaciu00f3n clara sobre el propu00f3sito y funcionamiento
+5. **Comentarios descriptivos**: Documentación clara sobre el propósito y funcionamiento
 
 6. **Respuestas estandarizadas**: Formato consistente en todas las respuestas
 
-7. **Seguridad**: Verificaciu00f3n de permisos basada en roles y propiedad
+7. **Seguridad**: Verificación de permisos basada en roles y propiedad
 
-## Conclusiu00f3n
+## Conclusión
 
-Los controladores son el corazu00f3n lu00f3gico de nuestra API RESTful. Siguen patrones consistentes y estu00e1n diseu00f1ados para ser legibles, mantenibles y seguros. Cada controlador implementa operaciones CRUD y lu00f3gica de negocio especu00edfica para su dominio, mientras mantiene un formato de respuesta consistente para toda la API.
+Los controladores son el corazón lógico de nuestra API RESTful. Siguen patrones consistentes y están diseñados para ser legibles, mantenibles y seguros. Cada controlador implementa operaciones CRUD y lógica de negocio específica para su dominio, mientras mantiene un formato de respuesta consistente para toda la API.

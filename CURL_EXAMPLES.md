@@ -7,8 +7,8 @@ Este documento proporciona ejemplos detallados de cómo interactuar con todos lo
 - [Autenticación](#autenticación)
 - [Usuarios](#usuarios)
 - [Productos](#productos)
-- [Categoru00edas](#categoru00edas)
-- [u00d3rdenes](#u00f3rdenes)
+- [Categorías](#categorías)
+- [Órdenes](#órdenes)
 - [Relaciones](#relaciones)
 - [Subida de archivos](#subida-de-archivos)
 
@@ -17,10 +17,10 @@ Este documento proporciona ejemplos detallados de cómo interactuar con todos lo
 Para mayor claridad, reemplaza estos valores en los ejemplos:
 
 - `localhost:3000`: Reemplaza con la URL base de tu API
-- `TU_TOKEN_JWT`: Reemplaza con un token JWT vu00e1lido
+- `TU_TOKEN_JWT`: Reemplaza con un token JWT válido
 - IDs de ejemplo como `645a1c8b1f7fa9b5e7a12345`: Reemplaza con IDs reales de tu base de datos
 
-## Autenticaciu00f3n
+## Autenticación
 
 ### Registro de usuario
 
@@ -28,23 +28,23 @@ Para mayor claridad, reemplaza estos valores en los ejemplos:
 curl -X POST \
   -H "Content-Type: application/json" \
   -d '{
-    "name": "Juan Pu00e9rez",
+    "name": "Juan Pérez",
     "email": "juan@ejemplo.com",
-    "password": "contraseu00f1a123"
+    "password": "contraseña123"
   }' \
-  http://localhost:3000/api/users/register
+  http://localhost:3000/api/auth/register
 ```
 
-### Inicio de sesiu00f3n
+### Inicio de sesión
 
 ```bash
 curl -X POST \
   -H "Content-Type: application/json" \
   -d '{
     "email": "juan@ejemplo.com",
-    "password": "contraseu00f1a123"
+    "password": "contraseña123"
   }' \
-  http://localhost:3000/api/users/login
+  http://localhost:3000/api/auth/login
 ```
 
 ## Usuarios
@@ -72,7 +72,7 @@ curl -X PUT \
   -H "Content-Type: application/json" \
   -H "Authorization: TU_TOKEN_JWT" \
   -d '{
-    "name": "Juan Pu00e9rez Actualizado",
+    "name": "Juan Pérez Actualizado",
     "defaultShippingAddress": {
       "street": "Calle Principal 123",
       "city": "Ciudad Ejemplo",
@@ -100,7 +100,7 @@ curl -X GET \
   http://localhost:3000/api/products?page=1&limit=10
 ```
 
-### Bu00fasqueda de productos por texto
+### Búsqueda de productos por texto
 
 ```bash
 curl -X GET \
@@ -130,7 +130,7 @@ curl -X POST \
   -d '{
     "name": "Smartphone XYZ",
     "price": 599.99,
-    "description": "Smartphone de u00faltima generaciu00f3n",
+    "description": "Smartphone de última generación",
     "category": "645a1c8b1f7fa9b5e7a12345",
     "stock": 15,
     "isAvailable": true
@@ -147,7 +147,7 @@ curl -X PUT \
   -d '{
     "name": "Smartphone XYZ Actualizado",
     "price": 649.99,
-    "description": "Versiu00f3n mejorada del smartphone",
+    "description": "Versión mejorada del smartphone",
     "category": "645a1c8b1f7fa9b5e7a12345",
     "stock": 20,
     "isAvailable": true
@@ -206,21 +206,21 @@ curl -X POST \
   -H "Content-Type: application/json" \
   -H "Authorization: TU_TOKEN_JWT" \
   -d '{
-    "name": "Electru00f3nica",
-    "description": "Productos electru00f3nicos y tecnolu00f3gicos"
+    "name": "Electrónica",
+    "description": "Productos electrónicos y tecnológicos"
   }' \
   http://localhost:3000/api/categories
 ```
 
-### Actualizar una categoru00eda completamente (PUT)
+### Actualizar una categoría completamente (PUT)
 
 ```bash
 curl -X PUT \
   -H "Content-Type: application/json" \
   -H "Authorization: TU_TOKEN_JWT" \
   -d '{
-    "name": "Electru00f3nica y Tecnologu00eda",
-    "description": "Productos electru00f3nicos, gadgets y accesorios tecnolu00f3gicos"
+    "name": "Electrónica y Tecnología",
+    "description": "Productos electrónicos, gadgets y accesorios tecnológicos"
   }' \
   http://localhost:3000/api/categories/645a1c8b1f7fa9b5e7a12345
 ```
@@ -232,7 +232,7 @@ curl -X PATCH \
   -H "Content-Type: application/json" \
   -H "Authorization: TU_TOKEN_JWT" \
   -d '{
-    "description": "Productos electru00f3nicos y tecnologu00eda moderna"
+    "description": "Productos electrónicos y tecnología moderna"
   }' \
   http://localhost:3000/api/categories/645a1c8b1f7fa9b5e7a12345
 ```
@@ -277,7 +277,7 @@ curl -X POST \
   http://localhost:3000/api/orders
 ```
 
-### Obtener todas las u00f3rdenes del usuario
+### Obtener todas las órdenes del usuario
 
 ```bash
 curl -X GET \
@@ -285,7 +285,7 @@ curl -X GET \
   http://localhost:3000/api/orders
 ```
 
-### Obtener una orden especu00edfica
+### Obtener una orden específica
 
 ```bash
 curl -X GET \
@@ -328,7 +328,7 @@ curl -X POST \
   http://localhost:3000/api/relations/products/645a1c8b1f7fa9b5e7a12345/creator
 ```
 
-### Asignar una categoru00eda a un producto
+### Asignar una categoría a un producto
 
 ```bash
 curl -X POST \
@@ -340,7 +340,7 @@ curl -X POST \
   http://localhost:3000/api/relations/products/645a1c8b1f7fa9b5e7a67890/category
 ```
 
-### Asignar mu00faltiples productos a una categoru00eda
+### Asignar múltiples productos a una categoría
 
 ```bash
 curl -X POST \
@@ -393,4 +393,4 @@ curl -X POST \
    }
    ```
 
-5. **Manejo de errores**: En caso de error, la respuesta tendru00e1 `"success": false` y un mensaje descriptivo
+5. **Manejo de errores**: En caso de error, la respuesta tendrá `"success": false` y un mensaje descriptivo

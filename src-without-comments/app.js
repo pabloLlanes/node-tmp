@@ -12,6 +12,7 @@ import productRouter from "./routes/productRouter.js";
 import categoryRouter from "./routes/categoryRouter.js";
 import orderRouter from "./routes/orderRouter.js";
 import relationRouter from "./routes/relationRouter.js";
+import authRouter from "./routes/authRouter.js";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -45,6 +46,7 @@ app.use((req, res, next) => {
     next()
 })
 
+app.use("/api/auth", authRouter);
 app.use("/api/users", userRouter);
 app.use("/api/products", productRouter);
 app.use("/api/categories", categoryRouter);

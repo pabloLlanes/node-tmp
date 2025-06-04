@@ -1,4 +1,5 @@
 import User from "../models/User.js";
+import Product from "../models/Product.js";
 import bcryptjs from "bcryptjs";
 import jwt from "jsonwebtoken";
 
@@ -33,7 +34,7 @@ export const login = async (req, res) => {
         res.json({ success: true, user, token })
     } catch (error) {
         console.log(error)
-        res.json({ success: true, message: error })
+        res.json({ success: false, message: error.message })
     }
 
 }
@@ -54,7 +55,7 @@ export const getUsers = async (req, res) => {
         console.log(error)
         res.status(500).json({
             statusOK: false,
-            message: "TREMENDO ERROR"
+            message: "Error al obtener usuarios"
         })
     }
 }
@@ -62,9 +63,16 @@ export const getUsers = async (req, res) => {
 export const createUser = async (req, res) => {
     try {
         console.log(req.user)
-        const { name, email, password, role } = req.body;
-
-        console.log(password)
+        const { name, email, password, role = "user" } = req.body;
+        
+        // Verificar si el usuario ya existe
+        const existingUser = await User.findOne({ email });
+        if (existingUser) {
+            return res.status(400).json({
+                success: false,
+                message: "El email ya está registrado"
+            });
+        }
 
         const salt = await bcryptjs.genSalt(10)
 
@@ -78,7 +86,7 @@ export const createUser = async (req, res) => {
         })
     } catch (error) {
         console.log(error)
-        res.status(500).json({ error: true, message: "TREMENDO ERROR CREANDO EL USUARIO" })
+        res.status(500).json({ success: false, message: "Error al crear el usuario" })
     }
 }
 
@@ -88,7 +96,7 @@ export const getUser = async (req, res) => {
         const user = await User.findById(userId);
 
         if (!user) {
-            return res.status(404).json({ message: "CHE USUARIO NO ENCONTRADO, pasame un id valido" });
+            return res.status(404).json({ success: false, message: "Usuario no encontrado" });
         }
 
         const products = await Product.find({ creator: userId }).populate('creator');
@@ -151,14 +159,14 @@ export const deleteUser = async (req, res) => {
 
         res.json({
             statusOK: true,
-            message: "user borrado!!"
+            message: "Usuario eliminado correctamente"
         })
 
     } catch (error) {
         console.log(error)
         res.status(500).json({
             statusOK: false,
-            message: "TREMENDO ERROR PARA TRAER UN USER"
+            message: "Error al eliminar el usuario"
         })
     }
 }
